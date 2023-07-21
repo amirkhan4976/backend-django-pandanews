@@ -1,0 +1,61 @@
+{% extends "news/base.html" %}
+{% block title %}Panda News - {{ topic }}{% endblock %}
+{% block content %}
+{% load static %}
+
+<!--Card Container-->
+<div class="container my-5">
+  {% if topic == "hackers-hacking" %}
+    <h1 class="text-center my-4">Top News | Hacking </h1>
+  {% elif topic == "anonymous-hacking"  %}
+    <h1 class="text-center my-4">Top News | Anonymous</h1>
+  {% else %}
+    <h1 class="text-center my-4">Top News | {{ topic }}</h1>
+  {% endif %}
+  <div class="row">
+
+  <!--Card-->
+    {% for news in topic_news %}
+    <div class="container col-md-3 my-3">
+      <div class="card" style="width: 20rem">
+        <div
+          class="bg-image hover-overlay ripple"
+          data-mdb-ripple-color="light"
+        >
+          {% if news.urlToImage %}
+            <img
+              src="{{ news.urlToImage}}"
+              class="img-fluid"
+            />
+          {% else %}
+            <img
+              src="{% static 'images/default_news.jpg' %}"
+              class="img-fluid"
+            />
+          {% endif %}
+          <a href="#!">
+            <div
+              class="mask"
+              style="background-color: rgba(251, 251, 251, 0.15)"
+            ></div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ news.title }}</h5>
+          <p class="card-text">By: {{ news.author }}
+            <br> <small> Posted on: {{ news.publishedAt }}</small>
+          </p>
+          <a href="{% url 'news-detail' news.id topic %}" class="btn btn-primary">Read more...</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+<!--Card End-->
+
+  </div>
+</div>
+<!--Card Container End-->
+
+{% include "news/pagination.html" with topic_news=topic_news pagination_range=pagination_range %}
+
+{% endblock %}
